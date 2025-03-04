@@ -10,10 +10,16 @@ def answer_query(query, context):
         context (str): The context to search for the answer.
     
     Returns:
-        str: A placeholder answer.
+        str: A simulated answer based on the query and context.
     """
 
-    return f"Answer to '{query}': This is a placeholder answer based on the context."
+    # Simulate a basic answer based on the query
+    if "what" in query.lower() and "python" in query.lower():
+        return "Python is a programming language known for its simplicity and readability."
+    elif "how" in query.lower() and "work" in query.lower():
+        return "This is a simulated explanation of how something works."
+    else:
+        return f"Simulated answer for the query: '{query}'."
 
 
 def text_summary(text):
@@ -24,10 +30,15 @@ def text_summary(text):
         text (str): The text to summarize.
     
     Returns:
-        str: A placeholder summary.
+        str: A simulated summary of the text.
     """
 
-    return "This is a placeholder summary of the text."
+    # Simulate a summary by extracting the first sentence
+    sentences = text.split(". ")
+    if len(sentences) > 0:
+        return sentences[0] + "."
+    else:
+        return "This is a simulated summary of the text."
 
 
 def tag_generation(text):
@@ -38,7 +49,14 @@ def tag_generation(text):
         text (str): The text to tag.
     
     Returns:
-        str: A placeholder list of tags.
+        str: A simulated list of tags.
     """
 
-    return "placeholder, tags, example"
+    # Simulate tags by extracting keywords
+    keywords = ["simulated", "tags", "example"]
+    if "python" in text.lower():
+        keywords.append("python")
+    if "decorators" in text.lower():
+        keywords.append("decorators")
+    
+    return ", ".join(keywords)

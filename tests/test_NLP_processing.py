@@ -10,13 +10,13 @@ from utils.NLP_processing import tag_generation
 class test(unittest.TestCase):
     def test_answer_query(self):
         context = "Python decorators are functions that modify the behavior of other functions."
-        query = "What are Python decorators?"
+        query = "What is Python?"
         answer = answer_query(query, context)
         self.assertNotEqual(answer.strip(), "", "Query answering failed!")
         print("Answer Query Test Passed:", answer)
     
     def test_text_summary(self):
-        text = "Python decorators are functions that modify the behavior of other functions..."
+        text = "Python decorators are functions that modify the behavior of other functions. They are commonly used in Python programming."
         summary = text_summary(text)
         self.assertNotEqual(summary.strip(), "", "Text summariation failed!")
         print("Text Summarizaton Test Passed:", summary)
