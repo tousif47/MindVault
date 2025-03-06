@@ -16,22 +16,22 @@ def create_connection(db_file):
         sqlite3.Connection: Connection object or None.
     """
 
-    connection = None
+    conn = None
     try:
-        connection = sqlite3.connect(db_file)
+        conn = sqlite3.connect(db_file)
         print(f"Connected to SQLite databse at {db_file}")
     except sqlite3.Error as e:
         print(f"Error connecting to databse: {e}")
     
-    return connection
+    return conn
 
 
-def create_tables(connection):
+def create_tables(conn):
     """
     Create the necessary tables in the database.
 
     Args:
-        connection (sqlite3.Connection): Database connection object.
+        conn (sqlite3.Connection): Database connection object.
     """
 
     sql_create_documents_table = """
@@ -73,20 +73,99 @@ def create_tables(connection):
         FOREIGN KEY (document_id) REFERENCES documents (id)
     );
     """
-    # TODO: implement try/except for table creation
+    
+    try:
+        cursor = conn.cursor()
+        cursor.execute(sql_create_documents_table)
+        cursor.execute(sql_create_summaries_table)
+        cursor.execute(sql_create_tags_table)
+        cursor.execute(sql_create_queries_table)
+        conn.commit()
+
+        print("Tables created successfully!")
+    
+    except sqlite3.Error as e:
+        print(f"Error creating tables: {e}")
 
 
-def insert_document():
-    # TODO
+def insert_document(conn, file_path, extracted_text):
+    """
+    Insert a new document into the database.
+
+    Args:
+        conn (sqlite3.Connection): Database connection object.
+        file_path (str): Path to the file.
+        extracted_text (str): Extracted text from the file.
+    
+    Returns:
+        int: ID of the inserted document.
+    """
+
+    sql = """
+    INSERT INTO documents (file_path, extracted_text)
+    VALUES (?, ?);
+    """
+    cursor = conn.cursor()
+    cursor.execute(sql, (file_path, extracted_text))
+    conn.commit()
+
+    return cursor.lastrowid
 
 
-def insert_summary():
-    # TODO
+def insert_summary(conn, document_id, summary_text):
+    """
+    Insert a summary into the database.
+
+    Args:
+        conn (sqlite3.Connection): Database connection object.
+        document_id (int): ID of the document.
+        summary_text (str): Summary of the document.
+    """
+
+    sql = """
+    INSERT INTO summaries (document_id, summary_text)
+    VALUES (?, ?);
+    """
+    cursor = conn.cursor()
+    cursor.execute(sql, (document_id, summary_text))
+    conn.commit()
 
 
-def insert_tags():
-    # TODO
+def insert_tags(conn, document_id, tags):
+    """
+    Insert tags into the database.
+
+    Args:
+        conn (sqlite3.Connection): Database connection object.
+        document_id (int): ID of the document.
+        tags (list): List of tags to insert.
+    """
+
+    sql = """
+    INSERT INTO tags (document_id, tag_text)
+    VALUES (?, ?);
+    """
+    cursor = conn.cursor()
+    for tag in tags:
+        cursor.execute(sql, (document_id, tag))
+    conn.commit()
 
 
-def insert_query():
-    # TODO
+def insert_query(conn, query_text, answer_text, document_id):
+    """
+    Insert a query and its answer into the database.
+
+    Args:
+        conn (sqlite3.Connection): Database connection object.
+        query_text (str): The user's query.
+        answer_text (str): The generated answer.
+        document_id (int): ID of the document.
+    """
+
+    sql = """
+    INSERT INTO queries (query_text, answer_text, document_id)
+    VALUES (?, ?, ?);
+    """
+    cursor = conn.cursor()
+    cursor.execute(sql, (query_text, answer_text, document_id))
+    conn.commit()
