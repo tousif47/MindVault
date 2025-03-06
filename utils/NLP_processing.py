@@ -1,62 +1,88 @@
 # utils/NLP_processing.py
 
+from utils.database import create_connection, insert_summary, insert_tags, insert_query
 
-def answer_query(query, context):
+
+def answer_query(query, context, document_id):
     """
     Placeholder function for answering a user query based on the provided context.
+    Inserts the query aand answer into the database.
     
     Args:
         query (str): The user's question.
         context (str): The context to search for the answer.
+        document_id (int): ID of the document in the database.
     
     Returns:
-        str: A simulated answer based on the query and context.
+        str: A placeholder answer.
     """
 
-    # Simulate a basic answer based on the query
-    if "what" in query.lower() and "python" in query.lower():
-        return "Python is a programming language known for its simplicity and readability."
-    elif "how" in query.lower() and "work" in query.lower():
-        return "This is a simulated explanation of how something works."
+    # Placeholder logic for answering the query
+    answer = f"Placeholder answer for the query: '{query}"
+
+    # Insert the query and answer into the database
+    conn = create_connection("mindvault.db")
+    if conn is not None:
+        insert_query(conn, query, answer, document_id)
+        conn.close()
+        print(f"Inserted query and answer for document ID: {document_id}")
     else:
-        return f"Simulated answer for the query: '{query}'."
+        print("Error: Could not connect to the database.")
+    
+    return answer
 
 
-def text_summary(text):
+def text_summary(text, document_id):
     """
     Placeholder function for summarizing the provided text.
+    Insert the summary into the database.
     
     Args:
         text (str): The text to summarize.
+        document_id (int): ID of the document in the database.
     
     Returns:
-        str: A simulated summary of the text.
+        str: A placeholder summary.
     """
 
-    # Simulate a summary by extracting the first sentence
-    sentences = text.split(". ")
-    if len(sentences) > 0:
-        return sentences[0] + "."
+    # Placeholder logic for summarizing the text
+    summary = "This is a placeholder summary of the text."
+
+    # Insert the summary into the database
+    conn = create_connection("mindvault.db")
+    if conn is not None:
+        insert_summary(conn, document_id, summary)
+        conn.close()
+        print(f"Inserted summary for document ID: {document_id}")
     else:
-        return "This is a simulated summary of the text."
+        print("Error: Could not connect to the database.")
+    
+    return summary
 
 
-def tag_generation(text):
+def tag_generation(text, document_id):
     """
     Placeholder function for generating tags for the provided text.
+    Insert the tags into the database.
 
     Args:
         text (str): The text to tag.
+        document_id (int): ID of the document in the database.
     
     Returns:
-        str: A simulated list of tags.
+        str: A placeholder list of tags.
     """
 
-    # Simulate tags by extracting keywords
-    keywords = ["simulated", "tags", "example"]
-    if "python" in text.lower():
-        keywords.append("python")
-    if "decorators" in text.lower():
-        keywords.append("decorators")
+    # Placeholder logic for generating tags
+    tags = "placeholder, tags, example"
+
+    # Insert the tags into the database
+    conn = create_connection("mindvault.db")
+    if conn is not None:
+        insert_tags(conn, document_id, tags.split(", ")) # Assuming tags are comma-separated
+        conn.close()
+        print(f"inserted tags for document ID: {document_id}")
+    else:
+        print("Error: Could not connect to the database.")
     
-    return ", ".join(keywords)
+    return tags
