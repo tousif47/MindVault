@@ -1,6 +1,9 @@
 # utils/NLP_processing.py
 
-from utils.database import create_connection, insert_summary, insert_tags, insert_query
+from utils.database import create_connection
+from utils.database import insert_summary
+from utils.database import insert_tags
+from utils.database import insert_query
 
 
 def answer_query(query, context, document_id):
@@ -22,6 +25,7 @@ def answer_query(query, context, document_id):
 
     # Insert the query and answer into the database
     conn = create_connection("mindvault.db")
+
     if conn is not None:
         insert_query(conn, query, answer, document_id)
         conn.close()
@@ -50,6 +54,7 @@ def text_summary(text, document_id):
 
     # Insert the summary into the database
     conn = create_connection("mindvault.db")
+
     if conn is not None:
         insert_summary(conn, document_id, summary)
         conn.close()
@@ -78,6 +83,7 @@ def tag_generation(text, document_id):
 
     # Insert the tags into the database
     conn = create_connection("mindvault.db")
+    
     if conn is not None:
         insert_tags(conn, document_id, tags.split(", ")) # Assuming tags are comma-separated
         conn.close()

@@ -1,8 +1,8 @@
 # utils/database.py
 
-from datetime import datetime
-
 import sqlite3
+
+from datetime import datetime
 
 
 def create_connection(db_file):
@@ -17,6 +17,7 @@ def create_connection(db_file):
     """
 
     conn = None
+    
     try:
         conn = sqlite3.connect(db_file)
         print(f"Connected to SQLite databse at {db_file}")
@@ -141,13 +142,18 @@ def insert_tags(conn, document_id, tags):
         tags (list): List of tags to insert.
     """
 
-    sql = """
-    INSERT INTO tags (document_id, tag_text)
-    VALUES (?, ?);
-    """
     cursor = conn.cursor()
-    for tag in tags:
-        cursor.execute(sql, (document_id, tag))
+
+    # Remove duplications from the tags list
+    unique_tags = list(set(tags))
+
+    # Insert only unique tags
+    for tag in unique_tags:
+        # Check if the tag already exists for this document
+        cursor.execute("SELECT id FROM tags WHERE document_id = ? AND tag_text = ?", (document_id, tag))
+        if not cursor.fetchone():   # If the tag doesn't exist, insert it
+            cursor.execute("INSERT INTO tags (document_id, tag_text) VALUES (?, ?)", (document_id, tag))
+    
     conn.commit()
 
 
