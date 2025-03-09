@@ -31,8 +31,9 @@ class TestDatabase(unittest.TestCase):
 
         if cls.conn:
             cls.conn.close()
-        if os.path.exists(cls.db_file):
-            os.remove(cls.db_file)
+
+        #if os.path.exists(cls.db_file):
+        #    os.remove(cls.db_file)
     
     def test_insert_document(self):
         """Test inserting a document into the database."""
